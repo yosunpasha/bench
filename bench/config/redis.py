@@ -11,7 +11,7 @@ def generate_config(bench_path):
 	config = get_config(bench_path)
 
 	ports = {}
-	for key in ('redis_cache', 'redis_queue', 'redis_socketio'):
+	for key in ('redis_cache', 'redis_queue', 'redis_socketio', 'redis_node'):
 		ports[key] = urlparse(config[key]).port
 
 	write_redis_config(
@@ -39,6 +39,14 @@ def generate_config(bench_path):
 			"redis_version": get_redis_version(),
 		},
 		bench_path=bench_path
+	)
+
+	write_redis_config(
+		template_name = "redis_node.conf",
+		context={
+			"port": ports["redis_node"],
+		},
+		bench_path = bench_path
 	)
 
 	# make pids folder

@@ -58,7 +58,7 @@ def get_gunicorn_workers():
 def update_config_for_frappe(config, bench_path):
 	ports = make_ports(bench_path)
 
-	for key in ('redis_cache', 'redis_queue', 'redis_socketio'):
+	for key in ('redis_cache', 'redis_queue', 'redis_socketio', 'redis_node'):
 		if key not in config:
 			config[key] = "redis://localhost:{0}".format(ports[key])
 
@@ -78,7 +78,8 @@ def make_ports(bench_path):
 		"file_watcher_port": 6787,
 		"redis_queue": 11000,
 		"redis_socketio": 12000,
-		"redis_cache": 13000
+		"redis_cache": 13000,
+		"redis_node": 14000,
 	}
 
 	# collect all existing ports
@@ -91,7 +92,7 @@ def make_ports(bench_path):
 				value = bench_config.get(key)
 
 				# extract port from redis url
-				if value and (key in ('redis_cache', 'redis_queue', 'redis_socketio')):
+				if value and (key in ('redis_cache', 'redis_queue', 'redis_socketio', 'redis_node')):
 					value = urlparse(value).port
 
 				if value:
